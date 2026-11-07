@@ -39,10 +39,11 @@ jobs:
         run: |
           npm install @capacitor/assets --save-dev
           
+          # تشغيل الأداة مباشرة عبر node لتجنب مشكلة Permission denied
           if [ -f "icon.png" ]; then
-            npx capacitor-assets generate --icon icon.png --android
+            node ./node_modules/@capacitor/assets/bin/capacitor-assets.js generate --icon icon.png --android
           elif [ -f "photo_2026-11-01_00-09-13.jpg" ]; then
-            npx capacitor-assets generate --icon photo_2026-11-01_00-09-13.jpg --android
+            node ./node_modules/@capacitor/assets/bin/capacitor-assets.js generate --icon photo_2026-11-01_00-09-13.jpg --android
           else
             echo "Skipping icon generation: No icon file found."
           fi
