@@ -19,6 +19,14 @@ jobs:
           node-version: '22'
           cache: ''
 
+      - name: Prepare Web Directory
+        run: |
+          mkdir -p www
+          # التأكد من وجود index.html ونسخه إلى www إذا لم يكن بداخله
+          if [ -f "index.html" ]; then
+            cp index.html www/
+          fi
+
       - name: Install Dependencies
         run: npm install
 
