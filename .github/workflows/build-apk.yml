@@ -22,18 +22,17 @@ jobs:
       - name: Prepare Web Directory & Assets
         run: |
           mkdir -p www
-          # نقل ملف اللعبة إلى مجلد الويب
           if [ -f "index.html" ]; then
             cp index.html www/
-            echo "تم نسخ index.html إلى www"
           fi
 
-          # إعداد مجلد assets للأيقونة كما يتوقعه capacitor-assets
           mkdir -p assets
+          # ننسخ الأيقونة المطلوبة إلى المجلد الذي تستخدمه الأداة
           if [ -f "icon.png" ]; then
             cp icon.png assets/icon.png
-          elif [ -f "photo_2026-11-01_00-09-13.jpg" ]; then
-            cp photo_2026-11-01_00-09-13.jpg assets/icon.png
+          else
+            echo "خطأ: ملف icon.png غير موجود!"
+            exit 1
           fi
 
       - name: Install Dependencies
@@ -41,7 +40,7 @@ jobs:
 
       - name: Generate App Icon
         run: |
-          # توليد الأيقونات مع استخدام --force لإجبار الاستبدال
+          # توليد الأيقونات (إجبار البناء على الفشل إذا لم تعمل)
           npx @capacitor/assets@latest generate --android --force
 
       - name: Set up JDK 17
