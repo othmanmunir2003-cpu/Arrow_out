@@ -22,20 +22,21 @@ jobs:
       - name: Prepare Web Directory
         run: |
           mkdir -p www
-          if [ -f "index.html" ]; then
-            cp index.html www/
-          fi
+          # نسخ ملف اللعبة إلى المجلد الذي يتوقعه Capacitor
+          cp index.html www/
 
       - name: Install Dependencies
         run: npm install
 
-      - name: Generate App Icon and Splash
+      - name: Generate App Icon
         run: |
-          # سيقوم بتوليد الأيقونات تلقائياً إذا كانت الصورة icon.png أو photo_2026-11-01_00-09-13.jpg موجودة
+          # توليد الأيقونة بناءً على الصورة المتاحة
           if [ -f "icon.png" ]; then
-            npx @capacitor/assets generate --icon icon.png --android
+            npx @capacitor/assets@latest generate --icon icon.png --android
           elif [ -f "photo_2026-11-01_00-09-13.jpg" ]; then
-            npx @capacitor/assets generate --icon photo_2026-11-01_00-09-13.jpg --android
+            npx @capacitor/assets@latest generate --icon photo_2026-11-01_00-09-13.jpg --android
+          else
+            echo "Skipping icon generation: No icon file found."
           fi
 
       - name: Set up JDK 17
@@ -46,7 +47,8 @@ jobs:
 
       - name: Add Android Platform
         run: |
-          npx cap add android
+          # إضافة ومزامنة منصة أندرويد
+          npx cap add android || echo "Android platform already exists"
           npx cap sync android
 
       - name: Build Android Debug APK
