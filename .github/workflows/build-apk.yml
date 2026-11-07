@@ -19,12 +19,6 @@ jobs:
           node-version: '22'
           cache: ''
 
-      # الخطوة الجديدة: تنظيم المجلدات
-      - name: Prepare Web Directory
-        run: |
-          mkdir -p www
-          cp index.html www/
-
       - name: Install Dependencies
         run: npm install
 
