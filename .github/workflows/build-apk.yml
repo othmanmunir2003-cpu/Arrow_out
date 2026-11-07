@@ -22,9 +22,8 @@ jobs:
       # الخطوة الجديدة: تنظيم المجلدات
       - name: Prepare Web Directory
         run: |
-          mkdir www
-          mv index.html www/
-          # انقل أي ملفات أخرى للعبة هنا إذا وجدت (مثل css, js, assets)
+          mkdir -p www
+          cp index.html www/
 
       - name: Install Dependencies
         run: npm install
