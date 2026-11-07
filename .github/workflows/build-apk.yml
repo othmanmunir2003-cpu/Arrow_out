@@ -19,7 +19,7 @@ jobs:
           node-version: '22'
           cache: ''
 
-      - name: Prepare Web Directory
+      - name: Prepare Web Directory & Assets
         run: |
           mkdir -p www
           if [ -f "index.html" ]; then
@@ -32,21 +32,21 @@ jobs:
             exit 1
           fi
 
+          # إعداد مجلد assets للأيقونة كما يتوقعه capacitor-assets
+          mkdir -p assets
+          if [ -f "icon.png" ]; then
+            cp icon.png assets/icon.png
+          elif [ -f "photo_2026-11-01_00-09-13.jpg" ]; then
+            cp photo_2026-11-01_00-09-13.jpg assets/icon.png
+          fi
+
       - name: Install Dependencies
         run: npm install
 
       - name: Generate App Icon
         run: |
-          npm install @capacitor/assets --save-dev
           chmod +x ./node_modules/.bin/* || true
-
-          if [ -f "icon.png" ]; then
-            npx capacitor-assets generate --icon icon.png --android
-          elif [ -f "photo_2026-11-01_00-09-13.jpg" ]; then
-            npx capacitor-assets generate --icon photo_2026-11-01_00-09-13.jpg --android
-          else
-            echo "Skipping icon generation: No icon file found."
-          fi
+          npx capacitor-assets generate --android
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
