@@ -27,10 +27,9 @@ jobs:
           fi
 
           mkdir -p assets
+          # التأكد من استخدام الصورة التي اخترتها كـ icon.png
           if [ -f "icon.png" ]; then
             cp icon.png assets/icon.png
-          elif [ -f "icon.jpg" ]; then
-            cp icon.jpg assets/icon.png
           elif [ -f "photo_2026-11-01_00-09-13.jpg" ]; then
             cp photo_2026-11-01_00-09-13.jpg assets/icon.png
           fi
@@ -42,7 +41,11 @@ jobs:
         run: |
           npm install @capacitor/assets --save-dev
           chmod -R 755 ./node_modules/.bin/
-          # إزالة خيار --force لتجنب الخطأ
+          
+          # حذف الأيقونات القديمة من مجلد الأندرويد لضمان تحديثها
+          rm -rf android/app/src/main/res/mipmap-*
+          
+          # توليد الأيقونات الجديدة
           ./node_modules/.bin/capacitor-assets generate --android
 
       - name: Set up JDK 17
