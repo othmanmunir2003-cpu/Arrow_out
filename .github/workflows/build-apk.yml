@@ -21,14 +21,11 @@ jobs:
 
       - name: Prepare Web Directory & Assets
         run: |
-          # تجهيز مجلد الويب
           mkdir -p www
           if [ -f "index.html" ]; then
             cp index.html www/
-            echo "تم نسخ index.html إلى www"
           fi
 
-          # إعداد مجلد assets للأيقونة
           mkdir -p assets
           if [ -f "icon.png" ]; then
             cp icon.png assets/icon.png
@@ -36,8 +33,6 @@ jobs:
             cp icon.jpg assets/icon.png
           elif [ -f "photo_2026-11-01_00-09-13.jpg" ]; then
             cp photo_2026-11-01_00-09-13.jpg assets/icon.png
-          else
-            echo "تحذير: لم يتم العثور على أي ملف أيقونة!"
           fi
 
       - name: Install Dependencies
@@ -46,12 +41,9 @@ jobs:
       - name: Generate App Icon
         run: |
           npm install @capacitor/assets --save-dev
-          
-          # منح صلاحيات التنفيذ للأدوات
           chmod -R 755 ./node_modules/.bin/
-          
-          # تشغيل الأداة مباشرة (تكتشف الأيقونة تلقائياً في مجلد assets)
-          ./node_modules/.bin/capacitor-assets generate --android --force
+          # إزالة خيار --force لتجنب الخطأ
+          ./node_modules/.bin/capacitor-assets generate --android
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
