@@ -22,14 +22,10 @@ jobs:
       - name: Prepare Web Directory & Assets
         run: |
           mkdir -p www
+          # نقل ملف اللعبة إلى مجلد الويب
           if [ -f "index.html" ]; then
-            mv index.html www/
-            echo "تم نقل index.html إلى www"
-          elif [ -f "www/index.html" ]; then
-            echo "ملف index.html موجود بالفعل في www"
-          else
-            echo "خطأ: لم يتم العثور على index.html في أي مكان!"
-            exit 1
+            cp index.html www/
+            echo "تم نسخ index.html إلى www"
           fi
 
           # إعداد مجلد assets للأيقونة كما يتوقعه capacitor-assets
@@ -45,8 +41,8 @@ jobs:
 
       - name: Generate App Icon
         run: |
-          chmod +x ./node_modules/.bin/* || true
-          npx capacitor-assets generate --android
+          # توليد الأيقونات مع استخدام --force لإجبار الاستبدال
+          npx @capacitor/assets@latest generate --android --force
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
