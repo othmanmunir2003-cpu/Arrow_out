@@ -22,13 +22,21 @@ jobs:
       - name: Prepare Web Directory
         run: |
           mkdir -p www
-          # التأكد من وجود index.html ونسخه إلى www إذا لم يكن بداخله
           if [ -f "index.html" ]; then
             cp index.html www/
           fi
 
       - name: Install Dependencies
         run: npm install
+
+      - name: Generate App Icon and Splash
+        run: |
+          # سيقوم بتوليد الأيقونات تلقائياً إذا كانت الصورة icon.png أو photo_2026-11-01_00-09-13.jpg موجودة
+          if [ -f "icon.png" ]; then
+            npx @capacitor/assets generate --icon icon.png --android
+          elif [ -f "photo_2026-11-01_00-09-13.jpg" ]; then
+            npx @capacitor/assets generate --icon photo_2026-11-01_00-09-13.jpg --android
+          fi
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
