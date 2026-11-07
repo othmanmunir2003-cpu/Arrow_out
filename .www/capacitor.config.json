@@ -1,7 +1,7 @@
 {
   "appId": "com.arrowout.game",
   "appName": "Arrow Out",
-  "webDir": ".",
+  "webDir": "www",
   "bundledWebRuntime": false,
   "android": {
     "allowMixedContent": true

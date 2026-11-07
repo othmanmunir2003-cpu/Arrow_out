@@ -17,8 +17,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          # تم تعطيل الكاش لتجنب الحاجة إلى package-lock.json
           cache: ''
+
+      # الخطوة الجديدة: تنظيم المجلدات
+      - name: Prepare Web Directory
+        run: |
+          mkdir www
+          mv index.html www/
+          # انقل أي ملفات أخرى للعبة هنا إذا وجدت (مثل css, js, assets)
 
       - name: Install Dependencies
         run: npm install
@@ -29,11 +35,10 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Add Android Platform with Capacitor
-        run: npx cap add android
-
-      - name: Update Capacitor Android
-        run: npx cap update android
+      - name: Add Android Platform
+        run: |
+          npx cap add android
+          npx cap sync android
 
       - name: Build Android Debug APK
         run: |
