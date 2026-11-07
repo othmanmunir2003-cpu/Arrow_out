@@ -21,16 +21,24 @@ jobs:
 
       - name: Prepare Web Directory
         run: |
+          # ننشئ المجلد إذا لم يكن موجوداً
           mkdir -p www
-          # نسخ ملف اللعبة إلى المجلد الذي يتوقعه Capacitor
-          cp index.html www/
+          # نتحقق إذا كان الملف في المجلد الرئيسي قبل النسخ
+          if [ -f "index.html" ]; then
+            mv index.html www/
+            echo "تم نقل index.html إلى www"
+          elif [ -f "www/index.html" ]; then
+            echo "ملف index.html موجود بالفعل في www"
+          else
+            echo "خطأ: لم يتم العثور على index.html في أي مكان!"
+            exit 1
+          fi
 
       - name: Install Dependencies
         run: npm install
 
       - name: Generate App Icon
         run: |
-          # توليد الأيقونة بناءً على الصورة المتاحة
           if [ -f "icon.png" ]; then
             npx @capacitor/assets@latest generate --icon icon.png --android
           elif [ -f "photo_2026-11-01_00-09-13.jpg" ]; then
@@ -47,7 +55,6 @@ jobs:
 
       - name: Add Android Platform
         run: |
-          # إضافة ومزامنة منصة أندرويد
           npx cap add android || echo "Android platform already exists"
           npx cap sync android
 
